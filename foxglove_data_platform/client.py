@@ -135,6 +135,7 @@ class Client:
     def create_event(
         self,
         device_id: str,
+        device_name: str,
         time: datetime.datetime,
         duration: int,
         metadata: Optional[Dict[str, str]] = {},
@@ -143,6 +144,7 @@ class Client:
         Creates a new event.
 
         device_id: The unique of the device associated with this event.
+        device_name: The human-readable name for the device associated with this event.
         time: The time at which the event occurred.
         duration: The duration of the event. Zero for an instantaneous event.
         metadata: Optional metadata attached to the event.
@@ -152,6 +154,7 @@ class Client:
             headers=self.__headers,
             json={
                 "deviceId": device_id,
+                "deviceName": device_name,
                 "durationNanos": str(duration),
                 "metadata": metadata,
                 "timestamp": time.astimezone().isoformat(),
@@ -162,6 +165,7 @@ class Client:
         return {
             "id": event["id"],
             "device_id": event["deviceId"],
+            "device_name": event["deviceName"],
             "timestamp_nanos": event["timestampNanos"],
             "duration_nanos": event["durationNanos"],
             "metadata": event["metadata"],

@@ -14,12 +14,14 @@ fake = Faker()
 def test_create_event():
     id = fake.uuid4()
     device_id = fake.uuid4()
+    device_name = "my_device_name"
     responses.add(
         responses.POST,
         api_url("/beta/device-events"),
         json={
             "id": id,
             "deviceId": device_id,
+            "deviceName": device_name,
             "timestampNanos": str(time.time_ns()),
             "durationNanos": "1",
             "metadata": {"foo": "bar"},
@@ -28,7 +30,9 @@ def test_create_event():
         },
     )
     client = Client("test")
-    event = client.create_event(device_id=device_id, time=datetime.now(), duration=1)
+    event = client.create_event(
+        device_id=device_id, device_name=device_name, time=datetime.now(), duration=1
+    )
     assert event["id"] == id
     assert event["device_id"] == device_id
 
